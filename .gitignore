@@ -1,0 +1,7 @@
+# Ignore the `api` folder's contents except for our .gitkeep file
+api/*
+!api/.gitkeep
+
+# Ignore the LÖVE API
+modules/
+love_api.lua
