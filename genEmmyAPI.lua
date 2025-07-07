@@ -9,6 +9,10 @@ local function safeDesc(src, prefix)
     return "--- " .. string.gsub(src, "\n", "\n" .. prefix .. "--- ")
 end
 
+local function stripNewlines(src)
+    return string.gsub(src, "\n", " ")
+end
+
 local function genReturns(variant)
     local returns = variant.returns
     local s = ""
@@ -105,7 +109,7 @@ local function genEnum(enum)
     local code = safeDesc(enum.description) .. '\n'
     code = code .. '---@alias ' .. enum.name .. '\n'
     for i, const in ipairs(enum.constants) do
-        code = code .. '---| "' .. const.name .. '" -- ' .. const.description .. '\n'
+        code = code .. '---| "' .. const.name .. '" -- ' .. stripNewlines(const.description) .. '\n'
     end
     code = code .. '\n'
     return code
