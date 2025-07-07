@@ -29,6 +29,7 @@ When you want to regenerate the autocomplete files, delete the contents of the `
   - Definition files now use `---@meta` rather than classes
   - `m.function` and `return m` were removed, now relying on meta syntax
   - All files have a namespace definition for `love`, meaning that `love.Object` is the type, which will not conflict with your own `Object` type
+  - Enums are now `---@alias`es rather than (unannotated) tables. Originally I just added `---@enum`, but you can't actually access those tables in LÖVE.
 
 - Added console output
 - Styling changes

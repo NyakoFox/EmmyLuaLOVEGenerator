@@ -100,19 +100,14 @@ local function genType(name, type)
 end
 
 local function genEnum(enum)
+    -- These'll have to actually be aliases, since LOVE isn't going to expose these or anything.
+
     local code = safeDesc(enum.description) .. '\n'
-    code = code .. enum.name .. ' = {\n'
+    code = code .. '---@alias ' .. enum.name .. '\n'
     for i, const in ipairs(enum.constants) do
-        code = code .. '    ' .. safeDesc(const.description, '    ') .. '\n'
-        local name = const.name
-        if name == '\\' then
-            name = '\\\\'
-        elseif name == '\'' then
-            name = '\\\''
-        end
-        code = code .. '    [\'' .. name .. '\'] = ' .. i .. ',\n'
+        code = code .. '---| "' .. const.name .. '" -- ' .. const.description .. '\n'
     end
-    code = code .. '}\n'
+    code = code .. '\n'
     return code
 end
 
