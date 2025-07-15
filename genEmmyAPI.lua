@@ -87,8 +87,8 @@ end
 
 local function genType(name, type)
     local code = "---@class " .. type.name
-    if type.parenttype then
-        code = code .. ' : ' .. type.parenttype
+    if type.supertypes then
+        code = code .. ' : ' .. table.concat(type.supertypes, ", ")
     end
     code = code .. '\n'
     code = code .. safeDesc(type.description) .. '\n'

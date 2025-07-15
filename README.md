@@ -37,6 +37,7 @@ When you want to regenerate the autocomplete files, delete the contents of the `
   - Indents should now be more consistent
   - None of the generated files should have default warnings
 
+- Supertypes are now generated properly. For example, anything which takes `love.Drawable` will now accept `love.Image` without a cast.
 - Small organization changes
 
 ## Credits
