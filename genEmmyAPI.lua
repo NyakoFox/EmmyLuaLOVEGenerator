@@ -62,9 +62,15 @@ local function genFunction(moduleName, fun, static)
                 for argIdx, argument in ipairs(arguments) do
                     if argIdx == 1 then
                         code = code .. argument.name .. ':' .. argument.type
+                        if (argument.default) then
+                            code = code .. '?'
+                        end
                     else
                         code = code .. ', '
                         code = code .. argument.name .. ':' .. argument.type
+                        if (argument.default) then
+                            code = code .. '?'
+                        end
                     end
                 end
                 code = code .. '):' .. genReturns(variant)
