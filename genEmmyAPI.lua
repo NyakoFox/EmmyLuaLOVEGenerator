@@ -36,46 +36,55 @@ local function genFunction(moduleName, fun, static)
     local code = safeDesc(fun.description) .. "\n"
     local argList = ''
 
-    for vIdx, variant in ipairs(fun.variants) do
+    local ordered = {}
+
+    for i, variant in ipairs(fun.variants) do
+        table.insert(ordered, variant)
+    end
+
+    -- Sort variants by number of arguments, then by name
+    table.sort(ordered, function(a, b)
+        return #(a.arguments or {}) > #(b.arguments or {})
+    end)
+
+    for vIdx, variant in ipairs(ordered) do
         -- args
-        local arguments = variant.arguments
-        if arguments and #arguments > 0 then
-            if vIdx == 1 then
-                for argIdx, argument in ipairs(arguments) do
-                    if argIdx == 1 then
-                        argList = argument.name
-                    else
-                        argList = argList .. ', ' .. argument.name
-                    end
-
-                    local type = argument.type
-                    local description = argument.description
-
-                    if (argument.default) then
-                        type = type .. "?"
-                        description = description .. " (Defaults to " .. argument.default .. ".)"
-                    end
-                    code = code .. '---@param ' .. argument.name .. ' ' .. type .. ' # ' .. description .. '\n'
+        local arguments = variant.arguments or {}
+        if vIdx == 1 then
+            for argIdx, argument in ipairs(arguments) do
+                if argIdx == 1 then
+                    argList = argument.name
+                else
+                    argList = argList .. ', ' .. argument.name
                 end
-            else
-                code = code .. '---@overload fun('
-                for argIdx, argument in ipairs(arguments) do
-                    if argIdx == 1 then
-                        code = code .. argument.name .. ':' .. argument.type
-                        if (argument.default) then
-                            code = code .. '?'
-                        end
-                    else
-                        code = code .. ', '
-                        code = code .. argument.name .. ':' .. argument.type
-                        if (argument.default) then
-                            code = code .. '?'
-                        end
-                    end
+
+                local type = argument.type
+                local description = argument.description
+
+                if (argument.default) then
+                    type = type .. "?"
+                    description = description .. " (Defaults to " .. argument.default .. ".)"
                 end
-                code = code .. '):' .. genReturns(variant)
-                code = code .. '\n'
+                code = code .. '---@param ' .. argument.name .. ' ' .. type .. ' # ' .. description .. '\n'
             end
+        else
+            code = code .. '---@overload fun('
+            for argIdx, argument in ipairs(arguments) do
+                if argIdx == 1 then
+                    code = code .. argument.name .. ':' .. argument.type
+                    if (argument.default) then
+                        code = code .. '?'
+                    end
+                else
+                    code = code .. ', '
+                    code = code .. argument.name .. ':' .. argument.type
+                    if (argument.default) then
+                        code = code .. '?'
+                    end
+                end
+            end
+            code = code .. '):' .. genReturns(variant)
+            code = code .. '\n'
         end
 
         if vIdx == 1 then

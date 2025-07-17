@@ -25,6 +25,7 @@ When you want to regenerate the autocomplete files, delete the contents of the `
   - Marked as optional in the `---@param` defines
   - Appends `(Defaults to <default>.)` to the description
   - Marked as optional in overloads (although you can't add descriptions to them unfortunately)
+  - Overloads are now sorted, so the function signature should have the most arguments
 
 - Should now work with modern EmmyLua:
   - Definition files now use `---@meta` rather than classes
