@@ -101,13 +101,12 @@ local function genFunction(moduleName, fun, static)
 end
 
 local function genType(name, type)
-    local code = "---@class " .. type.name
+    local code = safeDesc(type.description) .. '\n'
+    code = code .. "---@class " .. type.name
     if type.supertypes then
         code = code .. ' : ' .. table.concat(type.supertypes, ", ")
     end
-    code = code .. '\n'
-    code = code .. safeDesc(type.description) .. '\n'
-    code = code .. 'local ' .. name .. ' = {}\n'
+    code = code .. '\nlocal ' .. name .. ' = {}\n'
     -- functions
     if type.functions then
         for i, fun in ipairs(type.functions) do
@@ -145,9 +144,9 @@ local function genModule(name, api)
     -- types
     if api.types then
         for i, type in ipairs(api.types) do
-            f:write('--region ' .. type.name .. '\n')
+            f:write('--region ' .. type.name .. '\n\n')
             f:write(genType(type.name, type))
-            f:write('--endregion ' .. type.name .. '\n')
+            f:write('--endregion ' .. type.name .. '\n\n')
         end
     end
 
